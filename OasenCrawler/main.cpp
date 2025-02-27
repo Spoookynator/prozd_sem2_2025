@@ -1,6 +1,10 @@
 #include <iostream>
-#include "Enemy.h"
+#include "board.h"
 
 int main() {
-	Enemy enemy(Position(2,0));
+	srand(time(NULL));
+
+	Board board;
+
+	board.printBoard();
 }
