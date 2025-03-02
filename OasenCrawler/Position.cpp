@@ -12,3 +12,11 @@ std::pair<int8_t, int8_t> Position::distance_to(Position pos)
 
 	return std::make_pair(x_distance, y_distance);
 }
+
+bool Position::isEqualPosition(Position p) const
+{
+	bool sameX = this->x == p.x;
+	bool sameY = this->y == p.y;
+
+	return (sameX && sameY);
+}

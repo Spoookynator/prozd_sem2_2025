@@ -4,8 +4,22 @@
 class Enemy : public Entity
 {
 public:
-	using Entity::Entity;
+	enum Pattern
+	{
+		Random,
+		Chase,
+		Stationary,
+	};
+	
+	Enemy(Pattern, Position,int8_t, int8_t);
+
+	void movePattern(Position);
+
+	int8_t getDamage() const;
+
+	Pattern getPattern() const;
 
 private:
 	int damage;
+	Pattern pattern;
 };

@@ -1,10 +1,6 @@
 #include <iostream>
-#include "board.h"
+#include "game.h"
 
 int main() {
-	srand(time(NULL));
-
-	Board board;
-
-	board.printBoard();
+	Game::startGame();
 }

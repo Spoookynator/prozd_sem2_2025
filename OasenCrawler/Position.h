@@ -10,4 +10,6 @@ struct Position
 
 	// first is x, second is y
 	std::pair<int8_t, int8_t> distance_to(Position);
+
+	bool isEqualPosition(Position) const;
 };

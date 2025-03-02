@@ -1,6 +1,6 @@
 #pragma once
-#include "position.h"
-#include "constants.h"
+#include <stdint.h>
+#include "stat.h"
 
 class Field
 {
@@ -12,22 +12,25 @@ public:
 		Well,
 	};
 
-	// Position Object, Type Object, Is Revealed
-	Field(Position = Position(0,0), Type = Empty, bool = false);
 
-	Position getPosition() const;
+
+	// Type of field, field level, is revealed
+	Field(Type = Empty,int8_t = 0, bool = false);
+
 	bool isRevealed() const;
+
+	void setRevealed(bool);
 	char getSymbol() const;
 
-	Constants::Stat getStat() const;
+	Stat getStat() const;
 	Type getType() const;
 
+
 private:
-	Position position;
 	Type type;
 	
 	bool revealed;
 	char symbol;
 
-	Constants::Stat stat;
+	Stat stat;
 };

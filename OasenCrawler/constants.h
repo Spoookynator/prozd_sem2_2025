@@ -1,6 +1,7 @@
 #pragma once
 namespace Constants {
 	constexpr int MAX_FIELDSIZE = 5;	
+	constexpr int PLAYER_HP = 5;
 	
 	// looks best in multiples of 2
 	constexpr int PRINT_FIELD_SPACING = 4;
@@ -11,19 +12,13 @@ namespace Constants {
 	constexpr int8_t RELIC_FIELD_WEIGHT = 10;
 	constexpr int8_t WELL_FIELD_WEIGHT = 10;
 	
-	constexpr double BASE_HURT_CHANCE = 1/6;
+	constexpr double RELIC_HURT_CHANCE = 1.0f / 6.0f;
 
 	// symbols
-	constexpr char PLAYER_SYMBOL = 'P';
-	constexpr char EMPTY_SYMBOL = '*';
+	constexpr char PLAYER_SYMBOL = '@';
+	constexpr char EMPTY_SYMBOL = '_';
 	constexpr char RELIC_SYMBOL = 'R';
-	constexpr char TRAP_SYMBOL = 'T';
-	constexpr char WELL_SYMBOL = 'W';
-	
-	enum Stat {
-		None,
-		Intelligence,
-		Dexterity,
-		Luck,
-	};
+	constexpr char TRAP_SYMBOL = '^';
+	constexpr char WELL_SYMBOL = '+';
+	constexpr char ENEMY_SYMBOL = '#';
 }

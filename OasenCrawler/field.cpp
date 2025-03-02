@@ -2,10 +2,9 @@
 #include "field.h"
 #include "constants.h"
 
-Field::Field(Position pos, Type type, bool revealed) : position(pos), type(type), revealed(revealed)
+Field::Field(Type type, int8_t level, bool revealed) : type(type), revealed(revealed)
 {
-	this->stat = Constants::Stat::None;
-	this->revealed = false;
+	this->stat = Stat();
 
 	switch (type)
 	{
@@ -14,7 +13,6 @@ Field::Field(Position pos, Type type, bool revealed) : position(pos), type(type)
 		break;
 	case Field::Relic:
 		this->symbol = Constants::RELIC_SYMBOL;
-		this->stat = Constants::Stat::Intelligence;
 		this->revealed = true;
 		break;
 	case Field::Trap:
@@ -23,19 +21,19 @@ Field::Field(Position pos, Type type, bool revealed) : position(pos), type(type)
 		switch (rand() % 3)
 		{
 		case 0:
-			this->stat = Constants::Stat::Intelligence;
+			this->stat = Stat(Stat::Intelligence, level);
 			break;
 		case 1:
-			this->stat = Constants::Stat::Luck;
+			this->stat = Stat(Stat::Luck, level);
 			break;
 		case 2:
-			this->stat = Constants::Stat::Dexterity;
+			this->stat = Stat(Stat::Strength, level);
 			break;
 		}
 		break;
 	case Field::Well:
 		this->symbol = Constants::WELL_SYMBOL;
-		this->stat = Constants::Stat::Luck;
+		this->stat = Stat(Stat::Luck, level);
 		break;
 	default:
 		this->symbol = '?'; // 'unknown field type	
@@ -43,14 +41,14 @@ Field::Field(Position pos, Type type, bool revealed) : position(pos), type(type)
 	}
 }
 
-Position Field::getPosition() const
-{
-	return this->position;
-}
-
 bool Field::isRevealed() const
 {
 	return this->revealed;
+}
+
+void Field::setRevealed(bool input)
+{
+	this->revealed = input;
 }
 
 char Field::getSymbol() const
@@ -58,7 +56,7 @@ char Field::getSymbol() const
 	return this->symbol;
 }
 
-Constants::Stat Field::getStat() const
+Stat Field::getStat() const
 {
 	return this->stat;
 }
