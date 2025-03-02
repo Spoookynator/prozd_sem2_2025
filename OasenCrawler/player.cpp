@@ -10,10 +10,21 @@ Player::Player(int32_t hp) : Entity(Position(0, 0), hp)
 	this->luck.value = 0;
 	this->level = 0;
 	this->experience = 0;
+
+	this->swords = 0;
+	this->potions = 0;
+	this->teleportScrolls = 0;
 }
 
 Player::~Player()
 {
+	#ifdef _WIN32
+		system("cls");
+	#else
+		system("clear");
+	#endif
+	std::cout << "You lost! Here are your final stats:\n";
+	this->printStats();
 }
 
 bool Player::moveNorth()
@@ -47,6 +58,9 @@ void Player::printStats() const
 	std::cout << "Intelligence: " << (int)this->intelligence.value << ", ";
 	std::cout << "Strength: " << (int)this->strength.value << ", ";
 	std::cout << "Luck: " << (int)this->luck.value << "\n";
+	std::cout << "Potions: " << (int)this->potions << ", ";
+	std::cout << "Teleport Scrolls: " << (int)this->teleportScrolls << ", ";
+	std::cout << "Swords: " << (int)this->swords << "\n";
 	std::cout << "\n";
 }
 
@@ -99,9 +113,63 @@ void Player::reduceStat(Stat::Type type)
 	}
 }
 
+bool Player::useSword()
+{
+	if (this->swords > 0)
+	{
+		this->swords--;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool Player::useScroll()
+{
+	if (this->swords > 0)
+	{
+		this->teleportScrolls--;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool Player::usePotion()
+{
+	if (this->swords > 0)
+	{
+		this->potions--;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 void Player::gainItem(Stat::Type)
 {
+	int rng = rand() % 3;
 
+	switch (rng)
+	{
+	case 0:
+		std::cout << "You have gained a sword! Slay any enemy instantly, the next time you meet them!\n";
+		this->swords++;
+		break;
+	case 1:
+		std::cout << "You have gained a potion! Any time you would die, use this item and gain 1 heart!\n";
+		this->potions++;
+		break;
+	case 2:
+		std::cout << "You have gained a teleportation scroll! Should you fail an attribute check, destroy this and escape the trap anyways!\n";
+		this->teleportScrolls++;
+		break; 
+	default:
+		break;
+	}
 }
 
 

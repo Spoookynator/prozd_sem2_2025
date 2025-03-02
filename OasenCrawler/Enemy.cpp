@@ -16,6 +16,7 @@ void Enemy::movePattern(Position playerPos)
 
     if (this->pattern == Chase)
     {
+        // just moves in which ever direction is the shortes distance, prioritizing x
         std::pair<int8_t, int8_t> distance = this->getPosition().distance_to(playerPos);
 
         bool xSmaller = (std::abs(distance.first) >= std::abs(distance.second));

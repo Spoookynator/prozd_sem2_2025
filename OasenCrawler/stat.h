@@ -13,11 +13,11 @@ struct Stat
 		Strength,
 		Luck,
 	};
-	int8_t value;
-	Type type;
 
 	Stat(Type = None, int8_t = 0);
 
+	int8_t value;
+	Type type;
+
 	std::string toString() const;
-	
 };

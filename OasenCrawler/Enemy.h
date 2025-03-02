@@ -16,7 +16,6 @@ public:
 	void movePattern(Position);
 
 	int8_t getDamage() const;
-
 	Pattern getPattern() const;
 
 private:

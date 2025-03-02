@@ -23,7 +23,19 @@ void Game::startGame()
 		player.printStats();
 
 		// check if player is dead
-		if (player.getCurrentHp() <= 0) break;
+		// check if player has potion - use that instead
+		if (player.getCurrentHp() <= 0)
+		{
+			if (player.usePotion())
+			{
+				std::cout << "You almost died, but your potion saved you!\n";
+				player.heal(1);
+			}
+			else {
+				break;
+			}
+			
+		}
 
 		// input
 		playerMoveInput(player);
@@ -40,8 +52,6 @@ void Game::startGame()
 			system("clear");
 		#endif
 	}
-
-	std::cout << "you lost gg rest in piss" << std::endl;
 }
 
 bool movePlayer(Player& player, char direction);

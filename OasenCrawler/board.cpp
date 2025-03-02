@@ -6,27 +6,32 @@
 
 Board::Board(Player& player)
 {
-	// player with 5 hp
+	// links the player to the board, so the board can easily use player functions without having to pass the player,
+	// while still letting it be a separate entity
 	this->player = &player;
 
 	this->relicCount = 0;
 	generateBoard();
 }
 
-Field::Type Board::randomFieldType() {
+Field::Type Board::randomFieldType() 
+{
 
 	int8_t weights[4] = { Constants::EMPTY_FIELD_WEIGHT, Constants::TRAP_FIELD_WEIGHT, Constants::RELIC_FIELD_WEIGHT, Constants::WELL_FIELD_WEIGHT };
 	
 	int totalWeights = 0;
 	
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 4; i++) 
+	{
 		totalWeights += weights[i];
 	}
 
 	int randomNumber = rand() % totalWeights;
 
-	for (int i = 0; i < 4; i++) {
-		if (randomNumber < weights[i]) {
+	for (int i = 0; i < 4; i++) 
+	{
+		if (randomNumber < weights[i]) 
+		{
 			switch (i) {
 			case 0:
 				return Field::Empty;
@@ -59,18 +64,17 @@ void Board::printBoard() const
 		for (int j = 0; j < Constants::MAX_FIELDSIZE; j++)
 		{
 			// if the player is on the field, print the player symbol above all else
-
 			if (this->player->getPosition().isEqualPosition(Position(i, j)))
 			{
 				std::cout << Constants::PLAYER_SYMBOL;
-
 			}
 			else {
-
 				bool displayedEnemy = false;
 				for (auto& enemy : this->enemies)
 				{
-					if (enemy.getPosition().isEqualPosition(Position(i, j))) {
+					if (enemy.getPosition().isEqualPosition(Position(i, j))) 
+					{
+						// this is just for one enemy type, this would ideally be within the enemy class, but thats way to much work for me right now
 						if (enemy.getPattern() == Enemy::Stationary)
 						{
 							auto distance = enemy.getPosition().distance_to(this->player->getPosition());
@@ -82,9 +86,9 @@ void Board::printBoard() const
 							}
 						}
 						else {
-						displayedEnemy = true;
-						std::cout << Constants::ENEMY_SYMBOL;
-						break;
+							displayedEnemy = true;
+							std::cout << Constants::ENEMY_SYMBOL;
+							break;
 						}
 					}
 				}
@@ -92,22 +96,21 @@ void Board::printBoard() const
 				// dont show whats underneath the enemy
 				if (!displayedEnemy) {
 
-				if (this->playingField[i][j].isRevealed())
-				{
-					std::cout << this->playingField[i][j].getSymbol();
-				}
-				else {
-					std::cout << "*";
-				}
+					if (this->playingField[i][j].isRevealed())
+					{
+						std::cout << this->playingField[i][j].getSymbol();
+					}
+					else 
+					{
+						std::cout << "*";
+					}
 				}
 
 			}
-			
 
-			
+			// make the board appear slightly away from the edge
 			if (j < Constants::MAX_FIELDSIZE - 1)
 			{
-
 				for (int k = 0; k < Constants::PRINT_FIELD_SPACING; k++)
 				{
 					std::cout << " ";
@@ -126,6 +129,7 @@ void Board::printBoardStats() const
 	std::cout << "----- Board -----\n";
 	std::cout << "Level: " << (int)this->level << "\n";
 	std::cout << "Relics left: " << (int)this->relicCount << "\n";
+	std::cout << "Enemies left: " << (int)this->enemies.size() << "\n";
 	std::cout << "\n";
 }
 
@@ -142,10 +146,11 @@ void Board::processTurn()
 	case Field::Empty:
 		break;
 	case Field::Relic:
-		std::cout << "You found a relic!\n";
+		std::cout << "You found a relic! +1 exp!\n";
 
 		this->player->gainExperience();
 		this->player->getRelic();
+		this->player->gainItem();
 
 		// remove relic from board
 		field = Field(Field::Empty);
@@ -176,7 +181,6 @@ void Board::processTurn()
 				this->player->gainExperience();
 				break;
 			case 2:
-				std::cout << "Found 1 item!\n";
 				this->player->gainItem();
 				break;
 			}
@@ -187,44 +191,51 @@ void Board::processTurn()
 	}
 
 	// check if player is touching enemy
-	// TODO: item (sword or sth) instakills 1 enemy and gives exp
-
 	std::vector<Enemy>* vec = &this->enemies;
 		
-	for (auto enemy = vec->begin(); enemy != vec->end(); ) {
-		if (enemy->getPosition().isEqualPosition(this->player->getPosition())) {
+	for (auto enemy = vec->begin(); enemy != vec->end(); ) 
+	{
+		if (enemy->getPosition().isEqualPosition(this->player->getPosition())) 
+		{
 			std::cout << "Encountered enemy!";
 			
 			int8_t stat = this->player->getStatFromType(Stat::Strength).value;
 
-			if (stat > 0 && (double)rand() / RAND_MAX < 30.0f / (float)stat)
+			if (this->player->useSword())
 			{
-				std::cout << " Blocked enemy attack!\n";
+				std::cout << " Used a sword to decimate the enemy! +2 exp\n";
+
+				this->player->gainExperience();
+				this->player->gainExperience();
+
+				enemy->takeDamage(enemy->getCurrentHp());
 			}
-			else {
-				std::cout << " Recieved " << (int)enemy->getDamage() << " damage.\n";
-			
-				player->takeDamage(enemy->getDamage());
+			else
+			{
+				if (stat > 0 && (double)rand() / RAND_MAX < 30.0f / (float)stat)
+				{
+					std::cout << " Blocked enemy attack!\n";
+				}
+				else {
+					std::cout << " Recieved " << (int)enemy->getDamage() << " damage.\n";
+
+					player->takeDamage(enemy->getDamage());
+				}
+
+				enemy->takeDamage(1);
+
+				std::cout << "Enemy recieved 1 damage!\n";
 			}
-
 			
-			enemy->takeDamage(1);
-
-			std::cout << "Enemy recieved 1 damage!";
-
-			std::cout << "\n";
-
-
 		}
 
 			if (enemy->getCurrentHp() == 0)
 			{
 				enemy = vec->erase(enemy);
-				std::cout << " Enemy died :( +1 xp\n";
+				std::cout << "Enemy died :( +1 xp\n";
 				this->player->gainExperience();
 			}
 			else {
-
 				enemy++;
 			}
 	}
@@ -236,7 +247,6 @@ void Board::processTurn()
 		this->level++;
 		this->player->setPosition(Position(0, 0));
 		this->generateBoard();
-
 	}
 }
 
@@ -252,13 +262,11 @@ bool wellLucky(int8_t luck) {
 	double random = (double)rand() / RAND_MAX;
 	double chance = ((double)luck + 10) / 100.0f;
 
-	if (random < chance)
-	{
-		return true;
-	}
+	if (random < chance) return true;
 
 	return false;
 }
+
 void Board::helperCaseTrap() {
 	Field field = this->playingField[this->player->getPosition().x][this->player->getPosition().y];
 
@@ -266,10 +274,8 @@ void Board::helperCaseTrap() {
 
 	std::string statName = field.getStat().toString();
 
-	std::cout << "You stepped on a level " << (int)field.getStat().value 
-		<< " " << statName << " trap!\n";
-	std::cout << "Your " << statName << " is: "
-		<< (int)playerStatLevel << "\n";
+	std::cout << "You stepped on a level " << (int)field.getStat().value << " " << statName << " trap!\n";
+	std::cout << "Your " << statName << " is: " << (int)playerStatLevel << "\n";
 
 	double multiplier = field.getStat().value - (int)playerStatLevel;
 
@@ -291,13 +297,15 @@ void Board::helperCaseTrap() {
 	std::cout << "Hurt chance is: " << std::fixed << std::setprecision(1) << hurtChance * 100 << "%" << "\n";
 	
 	char input = NULL;
+
 	do
 	{
 		if (input == NULL)
 		{
 			std::cout << "Try your luck (1) or permanently loose 1 " << statName << " (2) to escape? ";
 		}
-		else {
+		else 
+		{
 			std::cout << "Invalid input, try again: ";
 		}
 
@@ -311,20 +319,31 @@ void Board::helperCaseTrap() {
 
 		if (random < hurtChance)
 		{
-			std::cout << "You got hurt!\n";
-			this->player->takeDamage(1);
+			// item scroll just gets auto used here
+			if (this->player->useScroll())
+			{
+				std::cout << "Used Teleportation Scroll and escaped!\n";
+			}
+			else {
+				std::cout << "You got hurt!\n";
+				this->player->takeDamage(1);
+			}
 		}
-		else {
+		else
+		{
 			std::cout << "You escaped!\n";
 		}
 	}
-	else {
+	else 
+	{
+		// punish the player for not knowing how many stats he has (its literally right there on the screen)
 		if (this->player->getStatFromType(field.getStat().type).value < 1)
 		{
 			std::cout << "Not enough " << statName << "! You hurt yourself in confusion!";
 			this->player->takeDamage(1);
 			return;
 		}
+
 		this->player->reduceStat(field.getStat().type);
 		std::cout << "You lost 1 " << statName << "!\n";
 	}
@@ -332,7 +351,6 @@ void Board::helperCaseTrap() {
 
 void Board::generateBoard()
 {
-	
 	// generate all enemies, their positions and types
 	generateEnemies();
 
@@ -344,21 +362,27 @@ void Board::generateBoard()
 		for (int j = 0; j < Constants::MAX_FIELDSIZE; j++)
 		{
 			Field::Type type = randomFieldType();
-
-			if (i == 0 && j == 0 && type == Field::Trap)
+			if (i == 0 && j == 0 && type == Field::Trap) 
 			{
 				type = Field::Empty;
 			}
 
+			// level of field can go up to the boards level, but is still random
 			int8_t rngLevel = (this->level == 0) ? 0 : rand() % this->level;
 			this->playingField[i][j] = Field(type, rngLevel);
 
+			// when the board is generated there is chance, based on your intelligence, to reveal some tiles
+			// 100 int means 100% chance to reveal
 			int8_t intelligence = player->getStatFromType(Stat::Intelligence).value;
-
-			if (intelligence != 0 && (double)rand() / RAND_MAX < (double)intelligence / 100.0f) {
+			if (intelligence != 0 && (double)rand() / RAND_MAX < (double)intelligence / 100.0f) 
+			{
 				this->playingField[i][j].setRevealed(true);
 			}
-			if (type == Field::Relic) this->relicCount++;
+			
+			if (type == Field::Relic) 
+			{
+				this->relicCount++;
+			}
 		}
 	}
 
@@ -382,7 +406,8 @@ void Board::generateBoard()
 
 void Board::generateEnemies()
 {
-	for (int i = 0; i < 3; i++)
+	// slowly more enemies will spawn, up to three at level 3 (4th stage)
+	for (int i = 0; i < std::min((int)this->level, 3); i++)
 	{
 		int rng = rand() % 3;
 
@@ -401,10 +426,9 @@ void Board::generateEnemies()
 		else {
 			// spawns randomly moving enemy with 2 hp and 2 dmg in a random location, except (0,0)
 
-			int rngX = rand() % 5;
-			int rngY = rand() % 5;
+			int rngX = rand() % 5, rngY = rand() % 5;
 
-			if (rngX == 0 && rngY == 0)
+			if (rngX == 0 && rngY == 0) 
 			{
 				rngX++;
 			}

@@ -8,17 +8,16 @@ public:
 	Player(int32_t);
 	~Player();
 
+	// movement
 	bool moveNorth();
-
 	bool moveSouth();
-
 	bool moveEast();
-
 	bool moveWest();
 
 	void printStats() const;
 
 	void gainExperience();
+	void gainItem(Stat::Type = Stat::None); 
 
 	void getRelic();
 
@@ -26,7 +25,10 @@ public:
 
 	void reduceStat(Stat::Type);
 
-	void gainItem(Stat::Type = Stat::None); 
+	bool useSword();
+	bool useScroll();
+	bool usePotion();
+
 
 private:
 	void levelUp();	
@@ -39,4 +41,10 @@ private:
 	Stat intelligence;
 	Stat strength;
 	Stat luck;
+
+	// items, which are just simple integers since it would not make sense to make a whole new class for them
+	// this game is not focused on the items, they are kinda just a side thing, so an intricate item system would just be wasted time and effort
+	int8_t swords;
+	int8_t teleportScrolls;
+	int8_t potions;
 };
