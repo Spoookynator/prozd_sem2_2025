@@ -127,7 +127,7 @@ bool Player::useSword()
 
 bool Player::useScroll()
 {
-	if (this->swords > 0)
+	if (this->teleportScrolls > 0)
 	{
 		this->teleportScrolls--;
 		return true;
@@ -139,7 +139,7 @@ bool Player::useScroll()
 
 bool Player::usePotion()
 {
-	if (this->swords > 0)
+	if (this->potions > 0)
 	{
 		this->potions--;
 		return true;
