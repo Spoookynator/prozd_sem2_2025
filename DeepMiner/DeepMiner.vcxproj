@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{854a315d-38a5-4d28-ab11-b773ef949120}</ProjectGuid>
-    <RootNamespace>FightClub</RootNamespace>
+    <ProjectGuid>{cae8c7f0-050b-42f8-9561-9cbac2fdb5f4}</ProjectGuid>
+    <RootNamespace>DeepMiner</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,17 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ability.cpp" />
-    <ClCompile Include="character.cpp" />
-    <ClCompile Include="fight.cpp" />
-    <ClCompile Include="gameloop.cpp" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ability.h" />
-    <ClInclude Include="character.h" />
-    <ClInclude Include="fight.h" />
-    <ClInclude Include="gameloop.h" />
+    <ClInclude Include="robot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
