@@ -1,5 +1,10 @@
-
+#include "gameManager.h"
+#include "world.h"
 
 int main() {
-	return;
+	World world(100);
+
+	GameManager gameManager;
+
+	gameManager.startGame(world);
 }

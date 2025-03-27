@@ -127,11 +127,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="game.cpp" />
+    <ClCompile Include="baseRobot.cpp" />
+    <ClCompile Include="gameManager.cpp" />
+    <ClCompile Include="misc.cpp" />
+    <ClCompile Include="world.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="robots.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="game.h" />
+    <ClInclude Include="misc.h" />
+    <ClInclude Include="world.h" />
+    <ClInclude Include="baseRobot.h" />
+    <ClInclude Include="gameManager.h" />
+    <ClInclude Include="robots.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
