@@ -68,7 +68,7 @@ char getLayerChar(double percent) {
 		index = 9;
 	}
 
-	if (index == 0)
+	if (index < 1)
 	{
 		return ' ';
 	}
