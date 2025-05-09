@@ -136,9 +136,11 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="position.cpp" />
     <ClCompile Include="stat.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="board.h" />
+    <ClInclude Include="catch.hpp" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="entity.h" />

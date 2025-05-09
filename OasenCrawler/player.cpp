@@ -149,8 +149,26 @@ bool Player::usePotion()
 	}
 }
 
-void Player::gainItem(Stat::Type)
+void Player::gainItem(Stat::Type type)
 {
+	if (type != Stat::None)
+	{
+		switch (type)
+		{
+		case Stat::Intelligence:
+			this->teleportScrolls;
+			break;
+		case Stat::Strength:
+			this->swords++;
+			break;
+		case Stat::Luck:
+			this->potions++;
+			break;
+		default:
+			break;
+		}
+	}
+
 	int rng = rand() % 3;
 
 	switch (rng)
