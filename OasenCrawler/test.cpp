@@ -4,6 +4,7 @@
 #include "stat.h"
 #include "Entity.h"
 #include "player.h"
+#include "Enemy.h"
 
 TEST_CASE("Position distance_to", "[Position]")
 {
@@ -116,4 +117,48 @@ TEST_CASE("Player Level Up", "[Player]")
 
 	REQUIRE(player.useScroll() == true);
 	REQUIRE(player.useScroll() == true);
+}
+
+TEST_CASE("Enemy Chase Movement", "[Enemy]")
+{
+	Position playerPos(4, 4);
+	Position enemyPos(0, 0);
+	Enemy enemy(Enemy::Chase, enemyPos, 10, 2);
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int k = 0; k < 2; k++)
+		{
+			enemy.movePattern(playerPos);
+			if (k % 2 == 0)
+			{
+				REQUIRE(enemy.getPosition().x == i + 1);
+			}
+			else {
+				REQUIRE(enemy.getPosition().y == i + 1);
+
+			}
+		}
+
+	}
+
+	auto dist = enemy.getPosition().distance_to(playerPos);
+	REQUIRE(dist.first == 0);
+	REQUIRE(dist.second == 0);
+}
+
+TEST_CASE("Enemy Stationary Movement", "[Enemy]")
+{
+	Position playerPos(4, 4);
+	Position enemyPos(0, 0);
+	Enemy enemy(Enemy::Stationary, enemyPos, 10, 2);
+	for (int i = 0; i < 4; i++)
+	{
+		for (int k = 0; k < 2; k++)
+		{
+			enemy.movePattern(playerPos);
+			REQUIRE(enemy.getPosition().x == 0);
+			REQUIRE(enemy.getPosition().y == 0);
+		}
+	}
 }
